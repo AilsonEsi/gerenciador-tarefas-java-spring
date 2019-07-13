@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Lista de Tarefas</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
+
+    </head>
+
+    <body>
+        <div class="contaier">
+
+            <div th:replace="fragmentos/fragmentos :: cabecalho"></div>
+            <div class="container">
+                <h3>Lista de Tarefas</h3>
+                <a href="/tarefas/inserir" class="btn btn-success">Inserir nova tarefa</a>
+                <div th:each="tarefa: ${tarefas}" class="my-3">
+                    <div class="card bg-light mb-3">
+                        <div class="card-header" th:text="${tarefa.titulo}"></div>
+                        <div class="card-body">
+                            <p class="card-text" th:text="${tarefa.descricao}"></p>
+                            <p class="card-text" th:text="${'Data de expiração: ' + #dates.format(tarefa.dataExpiracao, ' dd/MM/yyyy')}"></p>
+                            <p class="card-text" style="color:green" th:if="${tarefa.dataExpiracao.after(new java.util.Date())}">Em dia</p>
+                            <p class="card-text" style="color:red" th:if="${!tarefa.dataExpiracao.after(new java.util.Date())}">Atrasada</p>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <p>
+                                <a th:href="@{/tarefas/alterar/{id}(id=${tarefa.id})}">Alterar</a> |
+                                <a th:href="@{/tarefas/remover/{id}(id=${tarefa.id})}">Remover</a> |
+                                <a th:if="${!tarefa.concluida}" th:href="@{/tarefas/concluir/{id}(id=${tarefa.id})}">Concluir</a>
+                            </p>
+                            <p>
+                            <div class="alert alert-success" th:if="${tarefa.concluida}">Concluida</div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!--            <p data-th-text="#{welcome}">Welcome!</p>-->
+            </div>
+        </div>
+
+        <script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+        <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    </body>
+
+</html>
